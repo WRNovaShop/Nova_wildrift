@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WR Nova Shop</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Vazirmatn', sans-serif;
+    color: #f7f3ff;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(255, 67, 190, .18), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(100, 80, 255, .20), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(0, 220, 255, .10), transparent 30%),
+        #080711;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 45px 45px;
+    mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+.container {
+    width: min(920px, 92%);
+    margin: auto;
+    padding: 35px 0 60px;
+}
+
+/* =========================
+   SHOP CONFIG
+   فقط اطلاعات این قسمت را تغییر بده
+   ========================= */
+
+const CONFIG_PLACEHOLDER = "";
+
+/* Header */
+.hero {
+    text-align: center;
+    padding: 45px 20px 35px;
+}
+
+.logo {
+    display: inline-block;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: #ff72d2;
+    margin-bottom: 12px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 9vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(90deg, #ff65cf, #b78cff, #64e8ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 35px rgba(255, 82, 210, .25);
+}
+
+.hero p {
+    margin-top: 15px;
+    color: #aaa6bd;
+    font-size: 14px;
+}
+
+/* Main cards */
+.card {
+    background: rgba(17, 15, 29, .82);
+    border: 1px solid rgba(255, 103, 211, .18);
+    border-radius: 22px;
+    padding: 22px;
+    margin-top: 20px;
+    box-shadow:
+        0 0 35px rgba(134, 65, 255, .08),
+        inset 0 0 25px rgba(255, 255, 255, .015);
+    backdrop-filter: blur(12px);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: #fff;
+}
+
+.card-title span {
+    color: #ff71d5;
+}
+
+/* Price sections */
+.price-section {
+    margin-bottom: 15px;
+    border-radius: 17px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.07);
+    background: rgba(255,255,255,.025);
+}
+
+.price-heading {
+    padding: 13px 15px;
+    color: #eaa6ff;
+    font-weight: 700;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 76, 205, .09),
+        rgba(102, 93, 255, .06)
+    );
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 15px;
+    border-top: 1px solid rgba(255,255,255,.055);
+    font-size: 14px;
+}
+
+.price {
+    color: #67eaff;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.item-name {
+    color: #e9e5f2;
+}
+
+/* Guide */
+.step {
+    position: relative;
+    padding: 19px;
+    margin-top: 13px;
+    border-radius: 17px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 83, 199, .07),
+        rgba(82, 112, 255, .06)
+    );
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.step-number {
+    color: #ff70d3;
+    font-weight: 800;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.step h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.step p {
+    color: #bdb8ca;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.game-id {
+    direction: ltr;
+    display: inline-block;
+    margin-top: 9px;
+    padding: 9px 13px;
+    border-radius: 10px;
+    background: rgba(0,0,0,.3);
+    color: #70eaff;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Notice */
+.notice {
+    margin-top: 15px;
+    padding: 17px;
+    border-radius: 16px;
+    background: rgba(255, 193, 79, .055);
+    border: 1px solid rgba(255, 193, 79, .14);
+    color: #d8d2df;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.notice strong {
+    color: #ffd36d;
+}
+
+/* Contact */
+.contact {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 18px;
+    padding: 15px;
+    border-radius: 15px;
+    color: white;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff45bd, #8d65ff);
+    box-shadow: 0 0 25px rgba(255, 69, 189, .22);
+    transition: .2s;
+}
+
+.contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(255, 69, 189, .35);
+}
+
+.response-time {
+    text-align: center;
+    margin-top: 11px;
+    color: #9993aa;
+    font-size: 12px;
+}
+
+/* =========================
+   COMMENTS
+   ========================= */
+
+.comments-toggle {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    padding: 14px;
+    border-radius: 15px;
+    color: #fff;
+    font-family: inherit;
+    font-weight: 800;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 69, 189, .85),
+        rgba(141, 101, 255, .85)
+    );
+    box-shadow: 0 0 20px rgba(255, 69, 189, .12);
+    transition: .2s;
+}
+
+.comments-toggle:hover {
+    transform: translateY(-1px);
+}
+
+.comments-area {
+    display: none;
+    margin-top: 18px;
+}
+
+.comments-area.active {
+    display: block;
+}
+
+.comment-form {
+    padding: 17px;
+    border-radius: 17px;
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.comment-form-title {
+    font-weight: 800;
+    margin-bottom: 13px;
+    color: #fff;
+}
+
+.comment-input,
+.comment-textarea {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.08);
+    outline: none;
+    border-radius: 12px;
+    padding: 12px 13px;
+    margin-top: 9px;
+    background: rgba(0,0,0,.25);
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.comment-textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.comment-input:focus,
+.comment-textarea:focus {
+    border-color: rgba(255, 103, 211, .45);
+}
+
+.comment-input::placeholder,
+.comment-textarea::placeholder {
+    color: #777287;
+}
+
+.comment-submit {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    margin-top: 11px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(103, 234, 255, .12);
+    border: 1px solid rgba(103, 234, 255, .18);
+    color: #70eaff;
+    font-family: inherit;
+    font-weight: 800;
+}
+
+.comment-submit:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.comment-limit {
+    color: #777287;
+    font-size: 10px;
+    margin-top: 7px;
+}
+
+.comment-message {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    color: #aaa6bd;
+}
+
+.comments-list {
+    margin-top: 18px;
+}
+
+.comment {
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 15px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 83, 199, .045),
+        rgba(82, 112, 255, .045)
+    );
+    border: 1px solid rgba(255,255,255,.055);
+}
+
+.comment-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.comment-name {
+    color: #ff8bdd;
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.comment-date {
+    color: #6f6a7d;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.comment-text {
+    color: #d8d3df;
+    font-size: 13px;
+    line-height: 1.9;
+    margin-top: 7px;
+    word-break: break-word;
+}
+
+.comments-loading,
+.comments-empty {
+    text-align: center;
+    padding: 20px 5px;
+    color: #777287;
+    font-size: 12px;
+}
+
+/* =========================
+   SOCIAL LINKS
+   ========================= */
+
+.social-box {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(17, 15, 29, .82);
+    border: 1px solid rgba(255, 103, 211, .14);
+    box-shadow:
+        0 0 30px rgba(134, 65, 255, .06),
+        inset 0 0 25px rgba(255, 255, 255, .012);
+    backdrop-filter: blur(12px);
+}
+
+.social-title {
+    text-align: center;
+    font-weight: 800;
+    font-size: 17px;
+    margin-bottom: 14px;
+}
+
+.social-links {
+    display: grid;
+    gap: 9px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    padding: 13px 15px;
+    border-radius: 13px;
+    color: #e8e4ef;
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.05);
+    transition: .2s;
+}
+
+.social-link:hover {
+    transform: translateX(-2px);
+    border-color: rgba(255,103,211,.22);
+    background: rgba(255,103,211,.055);
+}
+
+.social-link span:last-child {
+    color: #70eaff;
+    direction: ltr;
+    font-size: 12px;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding-top: 35px;
+    color: #777287;
+    font-size: 12px;
+}
+
+.footer .neon {
+    color: #ff72d5;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .container {
+        width: 94%;
+        padding-top: 15px;
+    }
+
+    .hero {
+        padding-top: 35px;
+    }
+
+    .card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .price-row {
+        font-size: 12px;
+        padding: 13px 11px;
+    }
+
+    .price {
+        font-size: 12px;
+    }
+
+    .comment-top {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="hero">
+        <div class="logo">✦ WILD RIFT GIFT SHOP ✦</div>
+        <h1>NOVA</h1>
+        <p>Gift your favorites ♡ and enjoy the game.</p>
+    </header>
+
+
+    <!-- =========================
+         PRICE LIST
+         ========================= -->
+
+    <section class="card">
+
+        <div class="card-title">
+            <span>✦</span>
+            Price List
+        </div>
+
+        <!-- تاریخ از CONFIG خوانده می‌شود -->
+        <div class="notice" style="margin-top:0; margin-bottom:15px;">
+            آخرین بروزرسانی قیمت‌ها:
+            <strong id="lastUpdate"></strong>
+        </div>
+
+        <div id="priceList"></div>
+
+    </section>
+
+
+    <!-- =========================
+         GIFT GUIDE
+         ========================= -->
+
+    <section class="card">
+
+        <div class="card-title">
+            <span>𓆩♡𓆪</span>
+            Nova Gift Guide
+        </div>
+
+        <div class="step">
+            <div class="step-number">STEP 01</div>
+
+            <h3>قبل از Gift</h3>
+
+            <p>
+                به اکانت شاپ داخل Wild Rift اد فرند بدید.
+            </p>
+
+            <div class="game-id" id="gameId"></div>
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">15 DAYS</div>
+
+            <h3>انتظار برای فعال شدن Gift</h3>
+
+            <p>
+                بعد از طی شدن لیمیت پانزده روزه،
+                امکان ارسال Gift فعال میشه ✦
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">ORDER</div>
+
+            <h3>ثبت سفارش</h3>
+
+            <p>
+                برای اطلاع از قیمت‌ها و ثبت سفارش،
+                هماهنگی و واریز هزینه به ادمین پیام بدین.
+            </p>
+
+            <a class="contact" id="telegramContact" target="_blank">
+                ✦ پیام به @AuraYuki ✦
+            </a>
+
+            <div class="response-time">
+                ساعت پاسخگویی: ۱۲ ظهر تا ۱۲ شب
+            </div>
+
+            <!-- دکمه کامنت‌ها -->
+            <button
+                class="comments-toggle"
+                onclick="toggleComments()"
+            >
+                ♡ مشاهده کامنت‌ها
+            </button>
+
+            <!-- COMMENTS -->
+            <div class="comments-area" id="commentsArea">
+
+                <div class="comment-form">
+
+                    <div class="comment-form-title">
+                        ✦ نظر شما
+                    </div>
+
+                    <input
+                        id="commentName"
+                        class="comment-input"
+                        type="text"
+                        maxlength="10"
+                        placeholder="نام شما (حداکثر ۱۰ کاراکتر)"
+                    >
+
+                    <textarea
+                        id="commentText"
+                        class="comment-textarea"
+                        maxlength="50"
+                        placeholder="نظر خود را بنویسید (حداکثر ۵۰ کاراکتر)"
+                    ></textarea>
+
+                    <div class="comment-limit">
+                        نام: <span id="nameCount">0</span>/10
+                        &nbsp; • &nbsp;
+                        نظر: <span id="textCount">0</span>/50
+                    </div>
+
+                    <button
+                        id="commentSubmit"
+                        class="comment-submit"
+                        onclick="submitComment()"
+                    >
+                        ارسال نظر ✦
+                    </button>
+
+                    <div
+                        id="commentMessage"
+                        class="comment-message"
+                    ></div>
+
+                </div>
+
+                <div
+                    id="commentsList"
+                    class="comments-list"
+                >
+                    <div class="comments-loading">
+                        در حال دریافت کامنت‌ها...
+                    </div>
+                </div>
+
+            </div>
+
+            <p style="margin-top:10px;">
+                لطفاً حتماً قبل از واریز هماهنگ شود.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         NOTES
+         ========================= -->
+
+    <section class="card">
+
+        <div class="card-title">
+            <span>𖤐</span>
+            نکات مهم
+        </div>
+
+        <div class="notice">
+            <strong>قیمت‌ها ثابت نیستند.</strong><br>
+            ممکنه با توجه به نوسانات دلار تغییر کنند.
+        </div>
+
+        <div class="notice">
+            قیمت شارژ اکانت‌ها با ریجن‌های مختلف
+            نیز ممکنه متفاوت باشه.
+        </div>
+
+        <div class="notice">
+            در اکثر مواقع، خرید Gift Skin نسبت به
+            شارژ مستقیم اکانت به‌صرفه‌تر هست.
+        </div>
+
+        <div class="notice">
+            <strong>زمان سفارش:</strong><br>
+            در زمان‌های شلوغ، مثل شروع سیزن،
+            انتشار Wild Pass یا عرضه اسکین‌های جدید،
+            ممکنه سفارش‌ها تا ۲۴ ساعت زمان ببرند.
+            <br><br>
+            این تأخیر به دلیل محدودیت تعداد Gift
+            قابل ارسال توسط اکانت است.
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         NOVA TELEGRAM
+         ========================= -->
+
+    <section class="social-box">
+
+        <div class="social-title">
+            ✦ NOVA WILDRIFT ✦
+        </div>
+
+        <div class="social-links">
+
+            <a
+                class="social-link"
+                href="https://t.me/WildRiftNova"
+                target="_blank"
+            >
+                <span>Channel</span>
+                <span>@WildRiftNova ↗</span>
+            </a>
+
+            <a
+                class="social-link"
+                href="https://t.me/WildRiftNovaGp"
+                target="_blank"
+            >
+                <span>Group</span>
+                <span>@WildRiftNovaGp ↗</span>
+            </a>
+
+            <a
+                class="social-link"
+                href="https://t.me/WR_NovaShop"
+                target="_blank"
+            >
+                <span>Shop</span>
+                <span>@WR_NovaShop ↗</span>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+
+        ✦ Add Friend &nbsp; • &nbsp; Wait &nbsp; • &nbsp;
+        <span class="neon">Gift ♡</span>
+
+        <br><br>
+
+        WR Nova Shop
+
+    </footer>
+
+</div>
+
+
+<!-- =========================
+     SUPABASE
+     ========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* ============================================================
+   NOVA SHOP CONFIG
+   ============================================================
+
+   برای تغییر قیمت، تعداد، تاریخ یا آیدی بازی
+   فقط همین قسمت را تغییر بده.
+
+   بقیه سایت خودش از این اطلاعات استفاده می‌کند.
+   ============================================================ */
+
+const SHOP_CONFIG = {
+
+    /* تاریخ آخرین بروزرسانی قیمت */
+    lastUpdate: "۴ مهر ۱۴۰۵",
+
+    /* Game ID شاپ */
+    gameId: "Aura丨生命#yuki",
+
+    /* Telegram ادمین */
+    telegram: "AuraYuki",
+
+    /* قیمت‌ها */
+    prices: {
+
+        wildCore: [
+            {
+                amount: "245",
+                price: "300,000 T"
+            },
+            {
+                amount: "360",
+                price: "450,000 T"
+            },
+            {
+                amount: "445",
+                price: "550,000 T"
+            }
+        ],
+
+        skins: [
+            {
+                amount: "525",
+                price: "650,000 T"
+            },
+            {
+                amount: "725",
+                price: "900,000 T"
+            },
+            {
+                amount: "990",
+                price: "1,250,000 T"
+            },
+            {
+                amount: "1325",
+                price: "1,650,000 T"
+            }
+        ],
+
+        wildPass: [
+            {
+                amount: "415",
+                name: "Wild Pass Normal",
+                price: "520,000 T"
+            },
+            {
+                amount: "990",
+                name: "Wild Pass Elite",
+                price: "1,250,000 T"
+            },
+            {
+                amount: "1380",
+                name: "Wild Pass Bundle",
+                price: "1,700,000 T"
+            }
+        ],
+
+        miniPass: [
+            {
+                amount: "370",
+                name: "Mini Pass Normal",
+                price: "460,000 T"
+            },
+            {
+                amount: "570",
+                name: "Mini Pass Elite",
+                price: "700,000 T"
+            },
+            {
+                amount: "750 | 50 Key",
+                name: "",
+                price: "915,000 T"
+            }
+        ]
+    }
+};
+
+
+/* ============================================================
+   SUPABASE
+   ============================================================ */
+
+const SUPABASE_URL =
+    "https://yzgbnbymatczhvugfndq.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_3wR3bSOfjyCdgi0ncFngTA_1Chk0vEi";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* ============================================================
+   PRICE LIST
+   ============================================================ */
+
+function createPriceSection(title, items, type) {
+
+    let html = `
+        <div class="price-section">
+
+            <div class="price-heading">
+                ${title}
+            </div>
+    `;
+
+    items.forEach(item => {
+
+        let itemName = "";
+
+        if (type === "wildCore") {
+
+            itemName = `${item.amount} wildCore items`;
+
+        } else {
+
+            itemName = item.name
+                ? `${item.amount} ${item.name}`
+                : item.amount;
+        }
+
+        html += `
+            <div class="price-row">
+
+                <span class="item-name">
+                    ${itemName}
+                </span>
+
+                <span class="price">
+                    ${item.price}
+                </span>
+
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+
+    return html;
+}
+
+
+function renderPrices() {
+
+    const priceList =
+        document.getElementById("priceList");
+
+    priceList.innerHTML =
+
+        createPriceSection(
+            "𓂃• WildCore Items •𓂃",
+            SHOP_CONFIG.prices.wildCore,
+            "wildCore"
+        )
+
+        +
+
+        createPriceSection(
+            "✧ Skins ✧",
+            SHOP_CONFIG.prices.skins,
+            "skins"
+        )
+
+        +
+
+        createPriceSection(
+            "♡ Wild Pass ♡",
+            SHOP_CONFIG.prices.wildPass,
+            "wildPass"
+        )
+
+        +
+
+        createPriceSection(
+            "𓂃 Mini Pass 𓂃",
+            SHOP_CONFIG.prices.miniPass,
+            "miniPass"
+        );
+}
+
+
+/* ===========================================
