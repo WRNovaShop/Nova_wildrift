@@ -967,4 +967,347 @@ function renderPrices() {
 }
 
 
-/* ===========================================
+/* ============================================================
+   BASIC INFORMATION
+   ============================================================ */
+
+function loadBasicInfo() {
+
+    document.getElementById("lastUpdate").textContent =
+        SHOP_CONFIG.lastUpdate;
+
+    document.getElementById("gameId").textContent =
+        SHOP_CONFIG.gameId;
+
+    document.getElementById("telegramContact").href =
+        `https://t.me/${SHOP_CONFIG.telegram}`;
+
+}
+
+
+/* ============================================================
+   COMMENTS
+   ============================================================ */
+
+function toggleComments() {
+
+    const area =
+        document.getElementById("commentsArea");
+
+    area.classList.toggle("active");
+
+    if (area.classList.contains("active")) {
+
+        loadComments();
+
+        setTimeout(() => {
+
+            area.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 100);
+
+    }
+}
+
+
+/* ============================================================
+   LOAD COMMENTS
+   جدیدترین کامنت‌ها اول
+   ============================================================ */
+
+async function loadComments() {
+
+    const list =
+        document.getElementById("commentsList");
+
+    list.innerHTML = `
+        <div class="comments-loading">
+            در حال دریافت کامنت‌ها...
+        </div>
+    `;
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("reviews")
+
+        .select("id, name, comment, created_at")
+
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML = `
+            <div class="comments-empty">
+                دریافت کامنت‌ها با مشکل مواجه شد.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        list.innerHTML = `
+            <div class="comments-empty">
+                هنوز کامنتی ثبت نشده ♡
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML = "";
+
+    data.forEach(comment => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "comment";
+
+
+        const top =
+            document.createElement("div");
+
+        top.className = "comment-top";
+
+
+        const name =
+            document.createElement("div");
+
+        name.className = "comment-name";
+
+        name.textContent =
+            comment.name;
+
+
+        const date =
+            document.createElement("div");
+
+        date.className = "comment-date";
+
+        date.textContent =
+            formatCommentDate(
+                comment.created_at
+            );
+
+
+        const text =
+            document.createElement("div");
+
+        text.className = "comment-text";
+
+        text.textContent =
+            comment.comment;
+
+
+        top.appendChild(name);
+        top.appendChild(date);
+
+        div.appendChild(top);
+        div.appendChild(text);
+
+        list.appendChild(div);
+
+    });
+}
+
+
+/* ============================================================
+   DATE FORMAT
+   ============================================================ */
+
+function formatCommentDate(dateString) {
+
+    const date =
+        new Date(dateString);
+
+    return date.toLocaleDateString(
+        "fa-IR",
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }
+    );
+}
+
+
+/* ============================================================
+   SUBMIT COMMENT
+   ============================================================ */
+
+async function submitComment() {
+
+    const nameInput =
+        document.getElementById("commentName");
+
+    const textInput =
+        document.getElementById("commentText");
+
+    const button =
+        document.getElementById("commentSubmit");
+
+    const message =
+        document.getElementById("commentMessage");
+
+
+    const name =
+        nameInput.value.trim();
+
+    const comment =
+        textInput.value.trim();
+
+
+    if (!name) {
+
+        message.textContent =
+            "لطفاً نام خود را وارد کنید.";
+
+        return;
+    }
+
+
+    if (!comment) {
+
+        message.textContent =
+            "لطفاً نظر خود را بنویسید.";
+
+        return;
+    }
+
+
+    if (name.length > 10) {
+
+        message.textContent =
+            "نام نمی‌تواند بیشتر از ۱۰ کاراکتر باشد.";
+
+        return;
+    }
+
+
+    if (comment.length > 50) {
+
+        message.textContent =
+            "کامنت نمی‌تواند بیشتر از ۵۰ کاراکتر باشد.";
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    message.textContent =
+        "در حال ارسال...";
+
+
+    const {
+        error
+    } = await supabaseClient
+
+        .from("reviews")
+
+        .insert([
+            {
+                name: name,
+                comment: comment
+            }
+        ]);
+
+
+    if (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "ارسال کامنت انجام نشد.";
+
+        button.disabled = false;
+
+        return;
+    }
+
+
+    nameInput.value = "";
+    textInput.value = "";
+
+    document.getElementById("nameCount").textContent = "0";
+    document.getElementById("textCount").textContent = "0";
+
+
+    message.textContent =
+        "کامنت شما ثبت شد ♡";
+
+
+    button.disabled = false;
+
+
+    /* دوباره دریافت می‌کنیم
+       تا کامنت جدید بالاتر بیاید */
+
+    await loadComments();
+}
+
+
+/* ============================================================
+   CHARACTER COUNTERS
+   ============================================================ */
+
+document
+    .getElementById("commentName")
+    .addEventListener(
+        "input",
+        function () {
+
+            document.getElementById(
+                "nameCount"
+            ).textContent =
+                this.value.length;
+
+        }
+    );
+
+
+document
+    .getElementById("commentText")
+    .addEventListener(
+        "input",
+        function () {
+
+            document.getElementById(
+                "textCount"
+            ).textContent =
+                this.value.length;
+
+        }
+    );
+
+
+/* ============================================================
+   START
+   ============================================================ */
+
+renderPrices();
+
+loadBasicInfo();
+
+</script>
+
+</body>
+</html>
