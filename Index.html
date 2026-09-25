@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WR Nova Shop</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Vazirmatn', sans-serif;
+    color: #f7f3ff;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(255, 67, 190, .18), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(100, 80, 255, .20), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(0, 220, 255, .10), transparent 30%),
+        #080711;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Neon background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 45px 45px;
+    mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+.container {
+    width: min(920px, 92%);
+    margin: auto;
+    padding: 35px 0 60px;
+}
+
+/* Header */
+.hero {
+    text-align: center;
+    padding: 45px 20px 35px;
+}
+
+.logo {
+    display: inline-block;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: #ff72d2;
+    margin-bottom: 12px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 9vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(90deg, #ff65cf, #b78cff, #64e8ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 35px rgba(255, 82, 210, .25);
+}
+
+.hero p {
+    margin-top: 15px;
+    color: #aaa6bd;
+    font-size: 14px;
+}
+
+/* Main cards */
+.card {
+    background: rgba(17, 15, 29, .82);
+    border: 1px solid rgba(255, 103, 211, .18);
+    border-radius: 22px;
+    padding: 22px;
+    margin-top: 20px;
+    box-shadow:
+        0 0 35px rgba(134, 65, 255, .08),
+        inset 0 0 25px rgba(255, 255, 255, .015);
+    backdrop-filter: blur(12px);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: #fff;
+}
+
+.card-title span {
+    color: #ff71d5;
+}
+
+/* Price sections */
+.price-section {
+    margin-bottom: 15px;
+    border-radius: 17px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.07);
+    background: rgba(255,255,255,.025);
+}
+
+.price-heading {
+    padding: 13px 15px;
+    color: #eaa6ff;
+    font-weight: 700;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 76, 205, .09),
+        rgba(102, 93, 255, .06)
+    );
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 15px;
+    border-top: 1px solid rgba(255,255,255,.055);
+    font-size: 14px;
+}
+
+.price {
+    color: #67eaff;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.item-name {
+    color: #e9e5f2;
+}
+
+/* Guide */
+.step {
+    position: relative;
+    padding: 19px;
+    margin-top: 13px;
+    border-radius: 17px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 83, 199, .07),
+        rgba(82, 112, 255, .06)
+    );
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.step-number {
+    color: #ff70d3;
+    font-weight: 800;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.step h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.step p {
+    color: #bdb8ca;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.game-id {
+    direction: ltr;
+    display: inline-block;
+    margin-top: 9px;
+    padding: 9px 13px;
+    border-radius: 10px;
+    background: rgba(0,0,0,.3);
+    color: #70eaff;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Notice */
+.notice {
+    margin-top: 15px;
+    padding: 17px;
+    border-radius: 16px;
+    background: rgba(255, 193, 79, .055);
+    border: 1px solid rgba(255, 193, 79, .14);
+    color: #d8d2df;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.notice strong {
+    color: #ffd36d;
+}
+
+/* Contact button */
+.contact {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 18px;
+    padding: 15px;
+    border-radius: 15px;
+    color: white;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff45bd, #8d65ff);
+    box-shadow: 0 0 25px rgba(255, 69, 189, .22);
+    transition: .2s;
+}
+
+.contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(255, 69, 189, .35);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding-top: 35px;
+    color: #777287;
+    font-size: 12px;
+}
+
+.footer .neon {
+    color: #ff72d5;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .container {
+        width: 94%;
+        padding-top: 15px;
+    }
+
+    .hero {
+        padding-top: 35px;
+    }
+
+    .card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .price-row {
+        font-size: 12px;
+        padding: 13px 11px;
+    }
+
+    .price {
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="hero">
+        <div class="logo">✦ WILD RIFT GIFT SHOP ✦</div>
+        <h1>NOVA</h1>
+        <p>Gift your favorites ♡ and enjoy the game.</p>
+    </header>
+
+
+    <!-- PRICE LIST -->
+    <section class="card">
+        <div class="card-title">
+            <span>✦</span>
+            Price List
+        </div>
+
+        <div class="price-section">
+            <div class="price-heading">𓂃• Game Items •𓂃</div>
+
+            <div class="price-row">
+                <span class="item-name">245 Game Items</span>
+                <span class="price">300,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">360 Game Items</span>
+                <span class="price">450,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">445 Game Items</span>
+                <span class="price">550,000 T</span>
+            </div>
+        </div>
+
+
+        <div class="price-section">
+            <div class="price-heading">✧ Skins ✧</div>
+
+            <div class="price-row">
+                <span class="item-name">525 Skins</span>
+                <span class="price">650,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">725 Skins</span>
+                <span class="price">900,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">990 Skins</span>
+                <span class="price">1,250,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">1325 Skins</span>
+                <span class="price">1,650,000 T</span>
+            </div>
+        </div>
+
+
+        <div class="price-section">
+            <div class="price-heading">♡ Wild Pass ♡</div>
+
+            <div class="price-row">
+                <span class="item-name">415 Wild Pass Normal</span>
+                <span class="price">520,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">990 Wild Pass Elite</span>
+                <span class="price">1,250,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">1380 Wild Pass Bundle</span>
+                <span class="price">1,700,000 T</span>
+            </div>
+        </div>
+
+
+        <div class="price-section">
+            <div class="price-heading">𓂃 Mini Pass 𓂃</div>
+
+            <div class="price-row">
+                <span class="item-name">370 Mini Pass Normal</span>
+                <span class="price">460,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">570 Mini Pass Elite</span>
+                <span class="price">700,000 T</span>
+            </div>
+
+            <div class="price-row">
+                <span class="item-name">750 | 50 Key</span>
+                <span class="price">915,000 T</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- GIFT GUIDE -->
+    <section class="card">
+
+        <div class="card-title">
+            <span>𓆩♡𓆪</span>
+            Nova Gift Guide
+        </div>
+
+        <div class="step">
+            <div class="step-number">STEP 01</div>
+            <h3>قبل از Gift</h3>
+            <p>
+                به اکانت شاپ داخل Wild Rift اد فرند بدید.
+            </p>
+
+            <div class="game-id">
+                Aura丨生命#yuki
+            </div>
+        </div>
+
+
+        <div class="step">
+            <div class="step-number">15 DAYS</div>
+            <h3>انتظار برای فعال شدن Gift</h3>
+            <p>
+                بعد از طی شدن لیمیت پانزده روزه،
+                امکان ارسال Gift فعال میشه ✦
+            </p>
+        </div>
+
+
+        <div class="step">
+            <div class="step-number">ORDER</div>
+            <h3>ثبت سفارش</h3>
+            <p>
+                برای اطلاع از قیمت‌ها و ثبت سفارش،
+                هماهنگی و واریز هزینه به ادمین پیام بدین.
+            </p>
+
+            <a class="contact" href="https://t.me/AuraYuki">
+                ✦ پیام به @AuraYuki ✦
+            </a>
+
+            <p style="margin-top:10px;">
+                لطفاً حتماً قبل از واریز هماهنگ شود.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- NOTES -->
+    <section class="card">
+
+        <div class="card-title">
+            <span>𖤐</span>
+            نکات مهم
+        </div>
+
+        <div class="notice">
+            <strong>قیمت‌ها ثابت نیستند.</strong><br>
+            ممکنه با توجه به نوسانات دلار تغییر کنند.
+        </div>
+
+        <div class="notice">
+            قیمت شارژ اکانت‌ها با ریجن‌های مختلف
+            نیز ممکنه متفاوت باشه.
+        </div>
+
+        <div class="notice">
+            در اکثر مواقع، خرید Gift Skin نسبت به
+            شارژ مستقیم اکانت به‌صرفه‌تر هست.
+        </div>
+
+        <div class="notice">
+            <strong>زمان سفارش:</strong><br>
+            در زمان‌های شلوغ، مثل شروع سیزن،
+            انتشار Wild Pass یا عرضه اسکین‌های جدید،
+            ممکنه سفارش‌ها تا ۲۴ ساعت زمان ببرند.
+            <br><br>
+            این تأخیر به دلیل محدودیت تعداد Gift
+            قابل ارسال توسط اکانت است.
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+        ✦ Add Friend &nbsp; • &nbsp; Wait &nbsp; • &nbsp;
+        <span class="neon">Gift ♡</span>
+        <br><br>
+        WR Nova Shop
+    </footer>
+
+</div>
+
+</body>
+</html>
